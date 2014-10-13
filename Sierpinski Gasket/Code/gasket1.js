@@ -1,7 +1,7 @@
 var canvas;
 var gl;
 var points = [];
-var NumTimesToSubdivide = 5;
+var NumTimesToSubdivide = 4;
 
 // Requirement 3. Implement the Sierpinski Gasket algorithm
 /* display one triangle*/
@@ -40,7 +40,6 @@ window.onload = function init() {
 
 	// Initial triangle for Sierpinski Gasket
 	var vertices = [ vec2(-0.5,-0.5), vec2(0.5,-0.5), vec2(0.0,0.5) ];
-	var colors = [ vec4(1.0, 0.0, 0.0, 1.0), vec4(0.0, 1.0, 0.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0) ];
 	//triangle(vertices[0], vertices[1], vertices[2]);
 	divideTriangle (vertices[0], vertices[1], vertices[2], NumTimesToSubdivide);
 
@@ -61,16 +60,6 @@ window.onload = function init() {
     var vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
-
-    /* // Load the data into the GPU
-    var cBufferID = gl.createBuffer();
-    gl.bindBuffer( gl.ARRAY_BUFFER, cBufferID );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW );
-
-    // Associate out shader variables with our data buffer
-    var vColor = gl.getAttribLocation( program, "vColor" );
-    gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vColor ); */
 
     render();
   }

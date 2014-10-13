@@ -5,20 +5,24 @@
 <!-- Requirement 2. Implement shader codes. -->
 <script id="vertex-shader" type="x-shader/x-vertex">
 	attribute vec4 vPosition;
-	attribute vec4 vColor;
-	varying vec4 fColor;
+	attribute vec4 aVertexColor;
+	varying vec4 vColor;
 	void main()
 	{
 		gl_Position = vPosition;
-		fColor = vColor;
+		vColor = aVertexColor;
 	}
 </script>
 <script id="fragment-shader" type="x-shader/x-fragment">
 	precision mediump float;
-	varying vec4 fColor;
+	varying vec4 vColor;
 	void main()
 	{
-		gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+		//Extra Credit 1. Implement an application based color variable that can be passed
+		//through to the fragment shader.
+	    float lerpValue = gl_FragCoord.y / 500.0;
+
+		gl_FragColor = mix(vec4(1.0, 1.0, 1.0, 1.0), vec4(0.2, 0.2, 0.2, 1.0), lerpValue);
 	}
 </script>
 
