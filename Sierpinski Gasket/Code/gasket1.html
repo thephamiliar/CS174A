@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<!-- Import javascripts -->
+<head>
+<!-- Requirement 2. Implement shader codes. -->
+<script id="vertex-shader" type="x-shader/x-vertex">
+	attribute vec4 vPosition;
+	attribute vec4 vColor;
+	varying vec4 fColor;
+	void main()
+	{
+		gl_Position = vPosition;
+		fColor = vColor;
+	}
+</script>
+<script id="fragment-shader" type="x-shader/x-fragment">
+	precision mediump float;
+	varying vec4 fColor;
+	void main()
+	{
+		gl_FragColor = fColor;
+	}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/InitShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="gasket1.js"></script>
+</head>
+
+<body>
+<!-- Requirement 1. Get a WebGL element (canvas) to display without error. -->
+<canvas id="gl-canvas" width="500" height="500"></canvas>
+</body>
+
+</html>
