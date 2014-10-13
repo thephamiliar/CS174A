@@ -62,7 +62,7 @@ window.onload = function init() {
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
 
-    // Load the data into the GPU
+    /* // Load the data into the GPU
     var cBufferID = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBufferID );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW );
@@ -70,7 +70,7 @@ window.onload = function init() {
     // Associate out shader variables with our data buffer
     var vColor = gl.getAttribLocation( program, "vColor" );
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( vColor );
+    gl.enableVertexAttribArray( vColor ); */
 
     render();
   }
