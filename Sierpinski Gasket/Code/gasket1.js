@@ -32,6 +32,12 @@ function render() {
 	gl.flush();
 }
 
+//Extra Credit 1. Implement an application based color variable that can be passed
+//through to the fragment shader.
+function colorPicker() {
+	return vec4(Math.random(), Math.random(), Math.random(), 1.0);
+}
+
 // Initialize canvas and shaders
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
@@ -40,7 +46,6 @@ window.onload = function init() {
 
 	// Initial triangle for Sierpinski Gasket
 	var vertices = [ vec2(-0.5,-0.5), vec2(0.5,-0.5), vec2(0.0,0.5) ];
-	//triangle(vertices[0], vertices[1], vertices[2]);
 	divideTriangle (vertices[0], vertices[1], vertices[2], NumTimesToSubdivide);
 
 	// Configure WebGL
@@ -50,6 +55,13 @@ window.onload = function init() {
     //  Load shaders and initialize attribute buffers
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
+
+	//Extra Credit 1. Implement an application based color variable that can be passed
+	//through to the fragment shader.
+    var loc = gl.getUniformLocation(program, "vColor");
+   	var color = colorPicker();
+    if (loc != -1)
+    	gl.uniform4fv(loc, color);
     
     // Load the data into the GPU
     var vBufferID = gl.createBuffer();
@@ -60,6 +72,21 @@ window.onload = function init() {
     var vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
+
+	window.onkeypress = function (e){
+    	var key = e.keyCode ? e.keyCode : e.which;
+
+    	//Extra Credit 2. Implement	a method where the keyboard is used	to
+    	//change that color variable and redisplay.
+		if (key == 32)
+		{
+	    	var loc = gl.getUniformLocation(program, "vColor");
+		   	var color = colorPicker();
+		    if (loc != -1)
+	 		   	gl.uniform4fv(loc, color);
+ 			render();
+		}
+	}
 
     render();
   }
