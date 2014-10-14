@@ -6,6 +6,10 @@
 <script id="vertex-shader" type="x-shader/x-vertex">
 	attribute vec4 vPosition;
 
+	uniform vec4 uResolution;
+	uniform vec4 uTranslation;
+	uniform vec4 uRotation;
+
 	void main()
 	{
 		gl_Position = vPosition;

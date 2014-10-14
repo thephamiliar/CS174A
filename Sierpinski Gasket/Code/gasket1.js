@@ -38,6 +38,24 @@ function colorPicker() {
 	return vec4(Math.random(), Math.random(), Math.random(), 1.0);
 }
 
+//Extra Credit 3. Implement another fractal.
+var deg_to_rad = Math.PI / 180.0;
+var depth = 9;
+ 
+function drawLine(x1, y1, x2, y2, brightness){
+	points.push(x1, y1);
+	points.push(x2, y2);
+}
+function drawTree(x1, y1, angle, depth){
+	if (depth != 0){
+		var x2 = x1 + (Math.cos(angle * deg_to_rad) * depth * 10.0);
+		var y2 = y1 + (Math.sin(angle * deg_to_rad) * depth * 10.0);
+		drawLine(x1, y1, x2, y2, depth);
+		drawTree(x2, y2, angle - 20, depth - 1);
+		drawTree(x2, y2, angle + 20, depth - 1);
+	}
+}
+
 // Initialize canvas and shaders
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
@@ -73,18 +91,23 @@ window.onload = function init() {
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
 
-	window.onkeypress = function (e){
+	window.onkeydown = function (e){
     	var key = e.keyCode ? e.keyCode : e.which;
 
     	//Extra Credit 2. Implement	a method where the keyboard is used	to
     	//change that color variable and redisplay.
-		if (key == 32)
-		{
+		if (key == 32) {
 	    	var loc = gl.getUniformLocation(program, "vColor");
 		   	var color = colorPicker();
 		    if (loc != -1)
 	 		   	gl.uniform4fv(loc, color);
  			render();
+		} 
+		// Extra Credit 3. Switch between the two fractals
+		else if (key == 37) {
+			render();
+		} else if (key == 39) {
+			render();
 		}
 	}
 
