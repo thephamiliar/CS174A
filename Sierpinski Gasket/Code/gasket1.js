@@ -2,11 +2,11 @@ var canvas;
 var gl;
 var points = [];
 var branches = [];
-var NumTimesToSubdivide = 2;
+var NumTimesToSubdivide = 4;
 var loc;
 var matrix;
 var deg = 0;
-var type = 1;
+var type = 0;
 
 // Requirement 3. Implement the Sierpinski Gasket algorithm
 /* display one triangle*/
@@ -88,25 +88,22 @@ function drawLine(point, point2) {
 
   //Extra Credit 3. Implement another fractal.
 function divideBranches(point, angle, count){
-	if (count > 0){
+	if (count != 0){
 		var x2 = point[0] + (Math.cos(radians(angle)));
 		var y2 = point[1] + (Math.sin(radians(angle)));
 		var point2 = vec2(x2, y2);
-		var x3 = x2 * -1;
-		var point3 = vec2(x3, y2);
+		point2 = scale(0.5, point2);
 		drawLine(point, point2);
-		drawLine(point, point3);
-		divideBranches(point2, angle-5, count-1);
-		divideBranches(point3, angle-5, count-1);
+		divideBranches(point2, angle-20, count-1);
+		divideBranches(point2, angle+20, count-1);
 	}
 }
 
 function tree() {
 	// Initial triangle for Sierpinski Gasket
 	var root = vec2(0.0, -1.0);
-	var origin = vec2(0.0, -0.9);
-	drawLine(root,origin);
-	divideBranches(origin, 70, 4);
+	root = scale(0.3, root);
+	divideBranches(root, 90, NumTimesToSubdivide);
 	//branches.push(origin);
 	//branches.push(vec2(0.0, 0.0));
 	//branches.push(vec2(0.5, 0.0));
@@ -151,7 +148,7 @@ window.onload = function init() {
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) { alert ("WebGL isn't available"); }
 
-    tree();
+    gasket();
 
 	window.onkeydown = function (e){
     	var key = e.keyCode ? e.keyCode : e.which;
@@ -164,11 +161,11 @@ window.onload = function init() {
  			render();
 		} 
 		// Extra Credit 3. Switch between the two fractals
-		else if (key == 37) {
+		else if (key == 37 && type != 0) {
 			gasket();
 			type = 0;
 			render();
-		} else if (key == 39) {
+		} else if (key == 39 && type != 1) {
 			tree();
 			type = 1;
 			render();
