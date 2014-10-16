@@ -6,13 +6,12 @@
 <script id="vertex-shader" type="x-shader/x-vertex">
 	attribute vec4 vPosition;
 
-	uniform vec4 uResolution;
-	uniform vec4 uTranslation;
-	uniform vec4 uRotation;
+	//Extra Credit 4. Rotate the fractal.
+	uniform mat4 vMatrix;
 
 	void main()
 	{
-		gl_Position = vPosition;
+		gl_Position = vMatrix * vPosition;
 	}
 </script>
 <script id="fragment-shader" type="x-shader/x-fragment">
