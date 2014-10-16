@@ -1,8 +1,8 @@
 var canvas;
 var gl;
 var points = [];
-var snow = [];
-var NumTimesToSubdivide = 4;
+var branches = [];
+var NumTimesToSubdivide = 2;
 var loc;
 var matrix;
 var deg = 0;
@@ -36,7 +36,7 @@ function render() {
 	if (type == 0) {
 		gl.drawArrays(gl.TRIANGLES, 0, points.length);
     } else {
-		gl.drawArrays(gl.LINES, 0, snow.length);
+		gl.drawArrays(gl.LINES, 0, branches.length);
     }
 }
 
@@ -44,15 +44,6 @@ function render() {
 //through to the fragment shader.
 function colorPicker() {
 	return vec4(Math.random(), Math.random(), Math.random(), 1.0);
-}
-
-  //Extra Credit 3. Implement another fractal.
-function drawSnowflake(vertices, count){
-	for (i = 1; i < count; i++) {
-		var j = Math.floor((Math.random()*6) + 1) + 1;
-		var flake = mix(snow[i-1], vertices[j], 0.3);
-		snow.push(flake);
-	}
 }
 
 function gasket() {
@@ -90,18 +81,36 @@ function gasket() {
     gl.enableVertexAttribArray( vPosition );
 }
 
-function koch() {
-	// Initial triangle for Sierpinski Gasket
-	var vertices = [ vec2(1,0), vec2(0.5,0.866), vec2(-0.5,0.866),
-					 vec2(-1,0), vec2(-0.5,-0.866), vec2(0.5, -0.866) ];
-	var origin = vec2 (0.25, 0.5);
-	snow.push(origin);
-	snow.push(vertices[0]);
-	snow.push(vertices[1]);
-	snow.push(vertices[2]);
+function drawLine(point, point2) {
+	branches.push(point);
+	branches.push(point2);
+}
 
-		//drawSnowflake (vertices, NumTimesToSubdivide);
-	//divideTriangle (vertices[0], vertices[1], vertices[2], NumTimesToSubdivide);
+  //Extra Credit 3. Implement another fractal.
+function divideBranches(point, angle, count){
+	if (count > 0){
+		var x2 = point[0] + (Math.cos(radians(angle)));
+		var y2 = point[1] + (Math.sin(radians(angle)));
+		var point2 = vec2(x2, y2);
+		var x3 = x2 * -1;
+		var point3 = vec2(x3, y2);
+		drawLine(point, point2);
+		drawLine(point, point3);
+		divideBranches(point2, angle-5, count-1);
+		divideBranches(point3, angle-5, count-1);
+	}
+}
+
+function tree() {
+	// Initial triangle for Sierpinski Gasket
+	var root = vec2(0.0, -1.0);
+	var origin = vec2(0.0, -0.9);
+	drawLine(root,origin);
+	divideBranches(origin, 70, 4);
+	//branches.push(origin);
+	//branches.push(vec2(0.0, 0.0));
+	//branches.push(vec2(0.5, 0.0));
+	//branches.push(vec2(0.5, 0.5));
 
 	// Configure WebGL
 	gl.viewport( 0, 0, canvas.width, canvas.height );
@@ -125,7 +134,7 @@ function koch() {
     // Load the data into the GPU
     var vBufferID = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, vBufferID );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(snow), gl.STATIC_DRAW );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(branches), gl.STATIC_DRAW );
 
     // Associate out shader variables with our data buffer
     var vPosition = gl.getAttribLocation( program, "vPosition" );
@@ -134,13 +143,15 @@ function koch() {
 
 }
 
+
+
 // Initialize canvas and shaders
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) { alert ("WebGL isn't available"); }
 
-    koch();
+    tree();
 
 	window.onkeydown = function (e){
     	var key = e.keyCode ? e.keyCode : e.which;
@@ -158,7 +169,7 @@ window.onload = function init() {
 			type = 0;
 			render();
 		} else if (key == 39) {
-			koch();
+			tree();
 			type = 1;
 			render();
 		// Extra Credit 4. Rotate fractal
