@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script id="vertex-shader" type="x-shader/x-vertex">
+		attribute vec4 vPosition;
+		uniform mat4 u_modelViewProjMatrix;
+		uniform mat4 u_normalMatrix;
+		attribute vec4 vColor;
+		varying vec4 fColor;
+
+		void main() {
+			fColor = vColor;
+			gl_Position = 0.5 * vPosition;
+		}
+	</script>
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec4 fColor;
+
+		void main() {
+			gl_FragColor = fColor;
+		}
+	</script>
+	<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+	<script type="text/javascript" src="../Common/InitShaders.js"></script>
+	<script type="text/javascript" src="../Common/MV.js"></script>
+	<script type="text/javascript" src="../Code/nav.js"></script>
+</head>
+
+	<body>
+		<canvas id="gl-canvas" width="800" height="800"></canvas>
+	</body>
+</html>
